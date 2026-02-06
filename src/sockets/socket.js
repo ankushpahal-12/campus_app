@@ -2,11 +2,6 @@ const socketIo = require('socket.io');
 const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 const User = require('../models/user.model');
-const chatSocket = require('./chat.socket');
-const presenceSocket = require('./presence.socket');
-
-let io;
-
 const initializeSocket = (server) => {
     io = socketIo(server, {
         cors: {
@@ -14,6 +9,9 @@ const initializeSocket = (server) => {
             methods: ["GET", "POST"]
         }
     });
+
+    const chatSocket = require('./chat.socket');
+    const presenceSocket = require('./presence.socket');
 
     // Authentication Middleware
     io.use(async (socket, next) => {

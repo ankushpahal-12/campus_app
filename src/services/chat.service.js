@@ -2,7 +2,7 @@ const Chat = require('../models/chat.model');
 const Message = require('../models/message.model');
 const MessageStatus = require('../models/messagestatus.model');
 const Match = require('../models/match.model');
-const { getIO } = require('../sockets/socket');
+const socket = require('../sockets/socket');
 const env = require('../config/env');
 const { logAction } = require('./audit.service');
 const { containsAbuse } = require('../utils/abuse_filter.util');
@@ -81,7 +81,7 @@ exports.saveSystemMessage = async (matchId, content) => {
         messageType: 'system'
     });
 
-    const io = getIO();
+    const io = socket.getIO();
     io.to(matchId.toString()).emit('new_message', message);
 
     return message;

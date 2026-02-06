@@ -1,5 +1,5 @@
 const presenceService = require('../services/presence.service');
-const { getIO } = require('../sockets/socket');
+const socket = require('../sockets/socket');
 
 exports.updatePresence = async (req, res) => {
     try {
@@ -7,7 +7,7 @@ exports.updatePresence = async (req, res) => {
         const socketId = req.body.socketId || 'http-ping';
         await presenceService.setUserOnline(req.user.id, socketId);
 
-        const io = getIO();
+        const io = socket.getIO();
         io.emit('presence_update', { userId: req.user.id, status: 'online' });
 
         res.status(200).send('OK');

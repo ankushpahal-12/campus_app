@@ -1,7 +1,7 @@
 const { filterProfileData } = require('../services/privacy.service');
 const matchService = require('../services/match.service');
 const { logAction } = require('../services/audit.service');
-const { getIO } = require('../sockets/socket');
+const socket = require('../sockets/socket');
 
 exports.getDiscovery = async (req, res) => {
     try {
@@ -21,7 +21,7 @@ exports.swipe = async (req, res) => {
         await logAction(req.user.id, `SWIPE_${type}`, req, { swipedId });
 
         if (result.match) {
-            const io = getIO();
+            const io = socket.getIO();
             // Notify both users
             io.to(req.user.id.toString()).emit('match_found', { matchId: result.matchId, matchedWith: swipedId });
             io.to(swipedId.toString()).emit('match_found', { matchId: result.matchId, matchedWith: req.user.id });
