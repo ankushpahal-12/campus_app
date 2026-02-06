@@ -1,7 +1,8 @@
 require('dotenv').config();
 const { createServer } = require('http');
-const app = require('./src/app'); // Ensure routes are defined in here
+const app = require('./src/app');
 const rateLimit = require('express-rate-limit');
+
 const connectDB = require('./src/config/db');
 const { connectRedis } = require('./src/config/redis');
 const { initializeSocket } = require('./src/sockets/socket');

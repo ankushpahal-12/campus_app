@@ -29,15 +29,6 @@ const app = express();
 // Security HTTP headers
 app.use(helmet());
 
-const { apiLimiter } = require('./middlewares/rateLimit.middleware');
-app.use('/api', apiLimiter);
-
-// Auto-moderate profiles and messages
-app.use(['/api/profile', '/api/chats'], autoModerate(['content', 'bio']));
-
-// Check if device is still authorized
-app.use('/api', checkDeviceStatus);
-
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 
@@ -49,6 +40,17 @@ app.use(xss());
 
 // CORS
 app.use(cors());
+
+// Auto-moderate profiles and messages
+app.use(['/api/profile', '/api/chats'], autoModerate(['content', 'bio']));
+
+const { apiLimiter } = require('./middlewares/rateLimit.middleware');
+
+app.use('/api', apiLimiter);
+
+// Check if device is still authorized
+app.use('/api', checkDeviceStatus);
+
 
 
 

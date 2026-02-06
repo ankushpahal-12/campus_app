@@ -21,10 +21,15 @@ exports.autoModerate = (fields = ['content', 'bio']) => {
         });
 
         if (suspiciousFound) {
-            await logAction(req.user.id, 'CONTENT_FLAGGED', req, {
-                flags: req.moderationFlag
-            });
+            if (req.user) {
+                await logAction(req.user.id, 'CONTENT_FLAGGED', req, {
+                    flags: req.moderationFlag
+                });
+            } else {
+                console.warn('[Moderation] Suspicious content found in unauthenticated request');
+            }
         }
+
 
         next();
     };
