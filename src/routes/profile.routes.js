@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect } = require('../middlewares/auth.middleware');
 const { getProfile, updateProfile, getPreferences, updatePreferences, uploadPhoto, deletePhoto, setPrimaryPhoto } = require('../controllers/profile.controller');
-const upload = require('../middlewares/upload.middleware');
+const { upload } = require('../middlewares/upload.middleware');
 
 // Profile
 router.get('/', protect, getProfile);

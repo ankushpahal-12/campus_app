@@ -3,8 +3,12 @@ const router = express.Router();
 const { protect } = require('../middlewares/auth.middleware');
 const { uploadChatMedia } = require('../controllers/upload.controller');
 const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('../config/cloudinary');
+
+// Robust import for CloudinaryStorage
+const multerStorageCloudinary = require('multer-storage-cloudinary');
+const CloudinaryStorage = multerStorageCloudinary.CloudinaryStorage || multerStorageCloudinary.default?.CloudinaryStorage || multerStorageCloudinary;
+
+const { cloudinary } = require('../config/cloudinary');
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
