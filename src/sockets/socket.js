@@ -61,11 +61,11 @@ const initializeSocket = (server) => {
     return io;
 };
 
-const getIo = () => {
+const getIO = () => {
     if (!io) {
         throw new Error("Socket.io not initialized!");
     }
     return io;
 };
 
-module.exports = { initializeSocket, getIo };
+module.exports = { initializeSocket, getIO };

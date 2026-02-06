@@ -1,13 +1,16 @@
+require('dotenv').config();
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
 const { connectRedis } = require('./src/config/redis');
 const { initializeSocket } = require('./src/sockets/socket');
-require('dotenv').config();
 
 const port = process.env.PORT || 5000;
 
 const startServer = async () => {
+    console.log('Starting server initialization...');
+    console.log('Connecting to MongoDB...');
     await connectDB();
+    console.log('Connecting to Redis...');
     await connectRedis();
 
     const server = app.listen(port, () => {

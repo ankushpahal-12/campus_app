@@ -1,5 +1,4 @@
-const dotenv = require('dotenv');
-dotenv.config();
+
 
 const secrets = {
     jwtSecret: process.env.JWT_SECRET,

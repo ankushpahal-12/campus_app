@@ -1,4 +1,3 @@
-require('dotenv').config();
 const secrets = require('./secrets');
 
 module.exports = {
