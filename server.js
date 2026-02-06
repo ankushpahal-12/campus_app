@@ -5,7 +5,7 @@ const { connectRedis } = require('./src/config/redis');
 const { initializeSocket } = require('./src/sockets/socket');
 
 const port = process.env.PORT || 5000;
-
+app.set('trust proxy', 1);
 const startServer = async () => {
     await connectDB();
     await connectRedis();
@@ -16,5 +16,9 @@ const startServer = async () => {
 
     initializeSocket(server);
 };
-
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100
+});
+app.use(limiter);
 startServer();
