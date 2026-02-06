@@ -72,5 +72,7 @@ app.use('/api/upload', uploadRoutes);
 
 // Global Error Handling Middleware
 app.use(errorMiddleware);
-
+app.get('/', (req, res) => {
+    res.send('<h1>The API is running!</h1><p>The backend is officially live on Railway.</p>');
+});
 module.exports = app;
