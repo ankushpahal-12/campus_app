@@ -9,17 +9,30 @@ const otpRequestSchema = Joi.object({
     email: Joi.string().email().required()
 });
 
+const deviceSchema = {
+    brand: Joi.string().optional(),
+    model: Joi.string().optional(),
+    modelName: Joi.string().optional(),
+    os: Joi.string().optional(),
+    osVersion: Joi.string().optional(),
+    deviceId: Joi.string().optional(),
+    fingerprint: Joi.string().optional()
+};
+
 const otpVerifySchema = Joi.object({
     email: Joi.string().email().required(),
     otp: Joi.string().length(4).required(),
     password: Joi.string().min(6).required(),
-    displayName: Joi.string().min(3).max(30).optional()
-});
+    displayName: Joi.string().min(3).max(30).optional(),
+    ...deviceSchema
+}).unknown();
 
 const loginSchema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().required()
-});
+    password: Joi.string().required(),
+    ...deviceSchema
+}).unknown();
+
 
 const { MAX_INTERESTS } = require('../constants/interests');
 
