@@ -10,21 +10,14 @@ const errorMiddleware = (err, req, res, next) => {
             stack: err.stack
         });
     } else {
-        // Production: don't leak stack traces
-        if (err.isOperational) {
-            res.status(err.statusCode).json({
-                status: err.status,
-                message: err.message
-            });
-        } else {
-            // Programming or other unknown error: don't leak details
-            console.error('ERROR ', err);
-            res.status(500).json({
-                status: 'error',
-                message: 'Something went very wrong!'
-            });
-        }
+        // Production: Temporarily leak stack traces to solve this "next is not a function" bug
+        res.status(err.statusCode || 500).json({
+            status: err.status || 'error',
+            message: err.message,
+            stack: err.stack
+        });
     }
+
 };
 
 module.exports = errorMiddleware;
