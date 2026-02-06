@@ -1,10 +1,11 @@
 const redis = require('redis');
+const secrets = require('./secrets');
 
 let client;
 
 const connectRedis = async () => {
     client = redis.createClient({
-        url: process.env.REDIS_URL || 'redis://localhost:6379'
+        url: secrets.redisUrl || 'redis://localhost:6379'
     });
 
     client.on('error', (err) => console.log('Redis Client Error', err));

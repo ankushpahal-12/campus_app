@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken');
+const secrets = require('../config/secrets');
 
 /**
  * Generate Access Token (Short-lived)
  */
 exports.generateAccessToken = (userId) => {
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    return jwt.sign({ id: userId }, secrets.jwtSecret, {
         expiresIn: '15m'
     });
 };
@@ -13,7 +14,7 @@ exports.generateAccessToken = (userId) => {
  * Generate Refresh Token (Long-lived)
  */
 exports.generateRefreshToken = (userId) => {
-    return jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET, {
+    return jwt.sign({ id: userId }, secrets.jwtRefreshSecret, {
         expiresIn: '7d'
     });
 };
@@ -22,6 +23,6 @@ exports.generateRefreshToken = (userId) => {
  * Verify Token
  */
 exports.verifyToken = (token, isRefresh = false) => {
-    const secret = isRefresh ? (process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET) : process.env.JWT_SECRET;
+    const secret = isRefresh ? secrets.jwtRefreshSecret : secrets.jwtSecret;
     return jwt.verify(token, secret);
 };

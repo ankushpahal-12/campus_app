@@ -1,12 +1,13 @@
 const admin = require('firebase-admin');
 
+const secrets = require('./secrets');
+
 // In production, download your service account key and set GOOGLE_APPLICATION_CREDENTIALS
 // or pass the object to cert()
 try {
-    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-        const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    if (secrets.firebaseServiceAccount) {
         admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount)
+            credential: admin.credential.cert(secrets.firebaseServiceAccount)
         });
         console.log('Firebase Admin initialized');
     } else {
