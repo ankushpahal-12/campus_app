@@ -7,10 +7,7 @@ const { initializeSocket } = require('./src/sockets/socket');
 const port = process.env.PORT || 5000;
 
 const startServer = async () => {
-    console.log('Starting server initialization...');
-    console.log('Connecting to MongoDB...');
     await connectDB();
-    console.log('Connecting to Redis...');
     await connectRedis();
 
     const server = app.listen(port, () => {
