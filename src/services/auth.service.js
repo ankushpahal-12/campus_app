@@ -64,7 +64,9 @@ exports.verifyOTP = async (email, otp, req) => {
 };
 
 exports.loginUser = async (email, password, req) => {
+    // 1. Find user and explicitly include passwordHash for comparison
     const user = await User.findOne({ email }).select('+passwordHash');
+
     if (!user || !(await user.comparePassword(password))) {
         throw new Error('Invalid email or password');
     }
@@ -74,9 +76,7 @@ exports.loginUser = async (email, password, req) => {
         // We'll return an isDeleted flag so the frontend can show restoration UI
     }
 
-    const tokens = await generateTokens(user._id);
-
-    // Update security metadata
+    // 2. Update metadata ONLY if req exists
     if (req) {
         user.security.lastLoginIp = req.ip;
         user.security.lastLoginAt = new Date();
@@ -87,15 +87,20 @@ exports.loginUser = async (email, password, req) => {
             user.deactivation.deactivatedUntil = null;
         }
 
+        // This triggers the pre('save') hook in user.model.js
+        // Since we fixed the 'next' issue there, this is now safe.
+        // We also rely on isModified check in model to avoid re-hashing passwordHash unless changed
         await user.save();
     }
+
+    const tokens = await generateTokens(user._id);
 
     return {
         user: {
             id: user._id,
             email: user.email,
             displayName: user.displayName,
-            profilePhoto: user.profilePhoto,
+            profilePhoto: user.profilePhoto, // Ensure decrypt happens in model toJSON or here if needed
             isVerified: user.isVerified,
             isDeleted: user.isDeleted,
             isAdmin: user.email === env.SUPER_ADMIN_EMAIL
