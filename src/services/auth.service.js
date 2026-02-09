@@ -103,6 +103,7 @@ exports.loginUser = async (email, password, req) => {
             profilePhoto: user.profilePhoto, // Ensure decrypt happens in model toJSON or here if needed
             isVerified: user.isVerified,
             isDeleted: user.isDeleted,
+            role: user.role,
             isAdmin: user.email === env.SUPER_ADMIN_EMAIL
         },
         ...tokens
